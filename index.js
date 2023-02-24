@@ -12,6 +12,8 @@ app.get('/', async (req, res) => {
   res.render('./index', { article })
 });
 
+app.use('favicon.png', express.static('./favicon.png'));
+
 const server = app.listen(3000);
 server.on('connection', () => {
   console.log('Connection received, shutting it down');

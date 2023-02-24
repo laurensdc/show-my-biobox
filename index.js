@@ -1,8 +1,9 @@
-import { fetchRelevantArticleAsHTML } from './biobox.js';
 
+import open from 'open';
 import express from 'express';
+
+import { fetchRelevantArticleAsHTML } from './biobox.js';
 const app = express();
-const port = 3000;
 
 app.set('view engine', 'ejs')
 
@@ -11,6 +12,10 @@ app.get('/', async (req, res) => {
   res.render('./index', { article })
 });
 
-app.listen(port, () => {
-  console.log(`App listening at port ${port}`)
+const server = app.listen(3000);
+server.on('connection', () => {
+  console.log('Connection received, shutting it down');
+  server.close();
 });
+
+await open('http://localhost:3000');

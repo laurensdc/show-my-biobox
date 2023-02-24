@@ -17,6 +17,7 @@ function readHtmlAsTempCodingThing() {
 
 export async function fetchRelevantArticleAsHTML() {
   const html = await scrapeWebsite();
+  // const html = await readHtmlAsTempCodingThing();
   const $ = cheerio.load(html);
 
   const rowsWithBioboxArticles = $('#main #content #content-area section.views__rows .views-row');
@@ -30,8 +31,9 @@ export async function fetchRelevantArticleAsHTML() {
 
       // Remove clutter from article
       ourBox.find('h4').remove(); // box price
+      ourBox.find('h3').remove(); // box title
       ourBox.find('p').remove(); // same text always
-      ourBox.find('header').remove(); // double title
+      // ourBox.find('header').remove(); // double title
       ourBox.find('img').remove(); // local src to image
       ourBox.find('.biobox.links').remove(); // webshop url
       ourBox.find('.biobox__biopakket-form-key a').remove(); // choose this box url

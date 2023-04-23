@@ -15,30 +15,40 @@ function readHtmlAsTempCodingThing() {
   return data;
 }
 
-export async function fetchRelevantArticleAsHTML() {
+async function getHtmlAsCheerioFunction() {
+  // Fetch from actual live website
   const html = await scrapeWebsite();
+
+  // Hard coded HTML snippet for debugging
   // const html = await readHtmlAsTempCodingThing();
+
   const $ = cheerio.load(html);
+  return $;
+}
 
+function declutterArticle(ourBox) {
+  // Remove clutter from article
+  ourBox.find('h4').remove(); // box price
+  ourBox.find('h3').remove(); // box title
+  ourBox.find('p').remove(); // same text always
+  // ourBox.find('header').remove(); // double title
+  ourBox.find('img').remove(); // local src to image
+  ourBox.find('.biobox.links').remove(); // webshop url
+  ourBox.find('.biobox__biopakket-form-key a').remove(); // choose this box url
+  const html = ourBox.html();
+  return html;
+}
+
+export async function fetchRelevantArticleAsHTML() {
+  const $ = await getHtmlAsCheerioFunction();
   const rowsWithBioboxArticles = $('#main #content #content-area section.views__rows .views-row');
-
   const isTheBoxWereLookingFor = item => $(item).find('article').attr('about') === '/gemengde-biobox';
-  let extractedArticle;
 
+  let extractedArticle;
   rowsWithBioboxArticles.each(function (row) {
     if (isTheBoxWereLookingFor(this)) {
       const ourBox = $(this);
-
-      // Remove clutter from article
-      ourBox.find('h4').remove(); // box price
-      ourBox.find('h3').remove(); // box title
-      ourBox.find('p').remove(); // same text always
-      // ourBox.find('header').remove(); // double title
-      ourBox.find('img').remove(); // local src to image
-      ourBox.find('.biobox.links').remove(); // webshop url
-      ourBox.find('.biobox__biopakket-form-key a').remove(); // choose this box url
-
-      extractedArticle = ourBox.html();
+      extractedArticle = declutterArticle(ourBox);
     }
   })
 

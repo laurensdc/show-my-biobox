@@ -11,3 +11,21 @@ export function getFileName() {
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}.html`;
 }
+
+export function writeFileIfItDoesNotExist(article) {
+  if (!fs.existsSync(`./bioboxes/${getFileName()}`)) {
+    writeArticleToFile(article, getFileName());
+    console.log(`Wrote file ${getFileName()}`)
+  }
+}
+
+export const getNavElement = () => {
+  const filesInBioboxes = fs.readdirSync('./bioboxes');
+
+  let nav = '';
+  filesInBioboxes.forEach(file => {
+    nav += `<a href="/${file}">${file}</a> `;
+  })
+
+  return nav;
+}

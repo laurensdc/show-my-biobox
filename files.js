@@ -56,7 +56,9 @@ export const getNavElement = () => {
 
   let nav = '';
   filesInBioboxes.forEach(file => {
-    nav += `<a href="/${file}">${file}</a> `;
+    const removeDotHtml = file.replace(/\.html$/, '');
+
+    nav += `<a href="/${file}">${removeDotHtml}</a> `;
   })
 
   return nav;

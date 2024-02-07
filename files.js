@@ -1,8 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 
+export const bioboxDir = './bioboxes';
+
 export function writeArticleToFile(article, fileName) {
-  fs.writeFileSync(`./bioboxes/${fileName}`, article, 'utf-8')
+  fs.writeFileSync(`${bioboxDir}/${fileName}`, article, 'utf-8')
 }
 
 export function getFileName() {
@@ -14,45 +16,39 @@ export function getFileName() {
 }
 
 /**
- * 
  * @returns {boolean} - True if the content exists in any file, false otherwise
  */
 function contentExists(article) {
-  // Flag to track if the content already exists in any file
-  let exists = false;
+  const bioboxes = fs.readdirSync(bioboxDir);
 
-  const bioboxes = fs.readdirSync('./bioboxes');
-
-  for (const fileName of bioboxes) {
-    const filePath = path.join('./bioboxes', fileName);
+  for (const biobox of bioboxes) {
+    const filePath = path.join(bioboxDir, biobox);
 
     if (fs.statSync(filePath).isFile()) {
-      // Check the content of the file
       const existingContent = fs.readFileSync(filePath, 'utf8');
 
       if (existingContent === article) {
         console.log(`Content already exists in file ${filePath}. Skipping write.`);
-
-        exists = true;
-        break;
+        return true;
       }
     }
   }
 
-  return exists;
+  return false;
 }
 
-export function writeFileIfItDoesNotExist(article) {
-  const exists = contentExists(article);
-
-  if (!exists) {
+/**
+ * Write the file if no other file contains the same content
+ */
+export function writeFile(article) {
+  if (!contentExists(article)) {
     writeArticleToFile(article, getFileName());
     console.log(`Wrote file ${getFileName()}`);
   }
 }
 
 export const getNavElement = () => {
-  const filesInBioboxes = fs.readdirSync('./bioboxes');
+  const filesInBioboxes = fs.readdirSync(bioboxDir);
 
   let nav = '';
   filesInBioboxes.forEach(file => {

@@ -1,20 +1,21 @@
 import express from 'express';
 import fs from 'fs';
 import open from 'open';
+import path from 'path';
 
-import { getNavElement, writeFileIfItDoesNotExist } from './files.js';
+
+import { bioboxDir, getNavElement, writeFile } from './files.js';
 import { fetchRelevantArticleAsHTML } from './biobox.js';
 
 const app = express();
 
 app.set('view engine', 'ejs')
 
-
 app.get('/', async (req, res) => {
   const article = await fetchRelevantArticleAsHTML();
   const nav = getNavElement();
 
-  writeFileIfItDoesNotExist(article);
+  writeFile(article);
 
   res.render('./index', { article, nav })
 });
@@ -22,7 +23,8 @@ app.get('/', async (req, res) => {
 app.get('/:filename', async (req, res) => {
   const filename = req.params.filename;
   try {
-    const article = fs.readFileSync('./bioboxes/' + filename, 'utf-8');
+    const filePath = path.join(bioboxDir, filename);
+    const article = fs.readFileSync(filePath, 'utf-8');
     const nav = getNavElement();
 
     res.render('./index', { article, nav })

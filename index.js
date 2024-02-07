@@ -1,5 +1,6 @@
 import express from 'express';
 import fs from 'fs';
+import open from 'open';
 
 import { getNavElement, writeFileIfItDoesNotExist } from './files.js';
 import { fetchRelevantArticleAsHTML } from './biobox.js';
@@ -33,4 +34,6 @@ app.get('/:filename', async (req, res) => {
 
 app.use('favicon.png', express.static('./favicon.png'));
 
-const server = app.listen(3000);
+app.listen(3000, () => {
+  open('http://localhost:3000')
+});

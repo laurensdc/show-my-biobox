@@ -37,5 +37,5 @@ app.get('/:filename', async (req, res) => {
 app.use('favicon.png', express.static('./favicon.png'));
 
 app.listen(3000, () => {
-  open('http://localhost:3000')
+  // open('http://localhost:3000')
 });

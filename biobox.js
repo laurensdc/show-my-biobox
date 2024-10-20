@@ -1,8 +1,10 @@
-import fs from 'fs';
-import * as cheerio from 'cheerio';
+import fs from "fs";
+import * as cheerio from "cheerio";
 
 async function scrapeWebsite() {
-  const req = await fetch('https://www.dewassendemaan.be/biobox/bioboxen');
+  const req = await fetch(
+    "https://www.dewassendemaan.be/nl/inhoud/pakketinhoud",
+  );
   const html = await req.text();
   return html;
 }
@@ -11,7 +13,7 @@ async function scrapeWebsite() {
  * For testing DOM selection, without network calls
  */
 function readHtmlAsTempCodingThing() {
-  const data = fs.readFileSync('./dom-snip-for-testing.html', 'utf-8');
+  const data = fs.readFileSync("./dom-snip-for-testing.html", "utf-8");
   return data;
 }
 
@@ -20,7 +22,7 @@ async function getHtmlAsCheerioFunction() {
   const html = await scrapeWebsite();
 
   // Hard coded HTML snippet for debugging
-  // const html = await readHtmlAsTempCodingThing();
+  // const html = readHtmlAsTempCodingThing();
 
   const $ = cheerio.load(html);
   return $;
@@ -28,29 +30,37 @@ async function getHtmlAsCheerioFunction() {
 
 function declutterArticle(ourBox) {
   // Remove clutter from article
-  ourBox.find('h4').remove(); // box price
-  ourBox.find('h3').remove(); // box title
-  ourBox.find('p').remove(); // same text always
-  // ourBox.find('header').remove(); // double title
-  ourBox.find('img').remove(); // local src to image
-  ourBox.find('.biobox.links').remove(); // webshop url
-  ourBox.find('.biobox__biopakket-form-key a').remove(); // choose this box url
-  const html = ourBox.html();
-  return html;
+  ourBox.find("a").remove();
+  return ourBox;
+}
+
+/**
+ * Mutate the box and wrap strong tags in a tags to link to the recipes
+ * Fugly as f and works
+ */
+async function addLinksToRecipes(ourBox, $) {
+  ourBox.find("li strong").each(function (index, el) {
+    const item = $(el);
+    const itemContent = item.text();
+    item.wrap(
+      `<a href="https://www.dewassendemaan.be/nl/recepten?search=${itemContent}" target="_BLANK"></a>`,
+    );
+  });
 }
 
 export async function fetchRelevantArticleAsHTML() {
   const $ = await getHtmlAsCheerioFunction();
-  const rowsWithBioboxArticles = $('#main #content #content-area section.views__rows .views-row');
-  const isTheBoxWereLookingFor = item => $(item).find('article').attr('about') === '/gemengde-biobox';
 
-  let extractedArticle;
-  rowsWithBioboxArticles.each(function (row) {
-    if (isTheBoxWereLookingFor(this)) {
-      const ourBox = $(this);
-      extractedArticle = declutterArticle(ourBox);
-    }
-  })
+  const extractedArticle = $("main section").filter(function () {
+    return (
+      $(this).find("h1").text().trim().toLowerCase().includes("groente") &&
+      $(this).find("h1").text().trim().toLowerCase().includes("fruit")
+    );
+  });
 
-  return extractedArticle;
+  const declutteredArticle = declutterArticle(extractedArticle);
+
+  addLinksToRecipes(declutteredArticle, $);
+
+  return declutteredArticle.html();
 }

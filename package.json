@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "node --test",
+    "test:watch": "node --watch --test",
     "start": "node index.js",
     "watch": "npx nodemon index.js"
   },

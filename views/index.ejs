@@ -31,11 +31,6 @@
 
     body {
       max-width: 800px;
-    }
-
-    article,
-    .basic__body,
-    nav {
       background-image: none;
       background-color: #fff;
       opacity: 90%;
@@ -49,41 +44,10 @@
 <body>
   <%- article %>
 
-    <nav><%- nav %></nav>
-
-    <!-- Legende (footer) -->
-    <div class="basic__body field--name-body field--type-text-with-summary">
-      <h3>Legende</h3>
-
-      <p>De inhoud van onze boxen is steeds 100% bio.&nbsp;Door deze legende zijn we ook 100% transparant over de
-        herkomst van alle producten. Om 100% gerust te genieten!</p>
-
-      <p><span style="color:#93c01f;">▉ = </span><strong><a href="/onze-biodynamische-boerderij"><span
-              style="color:#93c01f;"><u>biodynamisch</u></span></a></strong><span style="color:#93c01f;"> van eigen
-          oogst</span></p>
-
-      <p><span style="color:#27ae60;"></span><span style="color:#d24934;"><span style="letter-spacing: 0.03em;">▉ =
-            biologisch lokaal product rechtstreeks van de boer of bakker (korte keten)</span></span></p>
-
-      <p><span style="color:#6699cc;">▉ = korte keten over de Europese grenzen heen, rechtstreeks van de bioboer via
-        </span><u><strong><a href="https://www.dewassendemaan.be/duurzaam-fruit"><span style="color:#6699cc;">The Food
-                Hub</span></a></strong></u></p>
-
-      <p><span style="color:#ffcc33;">▉ = fairtrade en bio</span></p>
-
-      <p><span style="color:#cc99cc;">▉ = in omschakeling naar bio</span></p>
-
-      <p><span style="color:#ff9933;">▉ = </span><strong><a href="/onze-biodynamische-boerderij"><span
-              style="color:#ff9933;"><u>biodynamisch</u></span></a></strong><span style="color:#ff9933;"> product van
-          een collega Demeter-boer</span></p>
-
-      <p><span style="color:#819381;">▉ = via de biologische groothandel</span></p>
-
-      <p>&nbsp;</p>
-
-      <p><em>Vanaf woensdagavond kan je hier de inhoud van je biobox van volgende week&nbsp;bekijken.&nbsp;Opgelet: deze
-          samenstelling is onder voorbehoud van noodzakelijke last minute wijzigingen.</em></p>
-    </div>
+    <nav>
+      <p>Bioboxen van de laatste 3 weken:</p>
+      <%- nav %>
+    </nav>
 </body>
 
 </html>

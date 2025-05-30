@@ -50,7 +50,7 @@ function highlightThisWeek(ourBox, $) {
 function addLinksToRecipes(ourBox, $) {
   ourBox.find("li strong").each(function (index, el) {
     const item = $(el);
-    const itemContent = item.text();
+    const itemContent = item.text().split(' ')[0];
     item.wrap(
       `<a href="https://www.dewassendemaan.be/nl/recepten?search=${itemContent}" target="_BLANK"></a>`,
     );

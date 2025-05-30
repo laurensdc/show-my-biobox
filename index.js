@@ -9,10 +9,19 @@ import { fetchRelevantArticleAsHTML } from './biobox.js';
 
 const app = express();
 
+export async function scrapeWebsite() {
+  const req = await fetch(
+    "https://www.dewassendemaan.be/nl/inhoud/pakketinhoud",
+  );
+  const html = await req.text();
+  return html;
+}
+
 app.set('view engine', 'ejs')
 
 app.get('/', async (req, res) => {
-  const article = await fetchRelevantArticleAsHTML();
+  const html = await scrapeWebsite();
+  const article = await fetchRelevantArticleAsHTML(html);
   const nav = getNavElement();
 
   writeFile(article);
@@ -37,5 +46,5 @@ app.get('/:filename', async (req, res) => {
 app.use('favicon.png', express.static('./favicon.png'));
 
 app.listen(3000, () => {
-//  open('http://localhost:3000')
+  // open('http://localhost:3000')
 });

@@ -1,14 +1,6 @@
 import fs from "fs";
 import * as cheerio from "cheerio";
 
-async function scrapeWebsite() {
-  const req = await fetch(
-    "https://www.dewassendemaan.be/nl/inhoud/pakketinhoud",
-  );
-  const html = await req.text();
-  return html;
-}
-
 function getWeekNumber(d) {
   // Copy date so don't modify original
   d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
@@ -20,21 +12,7 @@ function getWeekNumber(d) {
   return weekNo;
 }
 
-/**
- * For testing DOM selection, without network calls
- */
-function readHtmlAsTempCodingThing() {
-  const data = fs.readFileSync("./dom-snip-for-testing.html", "utf-8");
-  return data;
-}
-
-async function getHtmlAsCheerioFunction() {
-  // Fetch from actual live website
-  const html = await scrapeWebsite();
-
-  // Hard coded HTML snippet for debugging
-  // const html = readHtmlAsTempCodingThing();
-
+async function getHtmlAsCheerioFunction(html) {
   const $ = cheerio.load(html);
   return $;
 }
@@ -79,8 +57,8 @@ async function addLinksToRecipes(ourBox, $) {
   });
 }
 
-export async function fetchRelevantArticleAsHTML() {
-  const $ = await getHtmlAsCheerioFunction();
+export async function fetchRelevantArticleAsHTML(html) {
+  const $ = await getHtmlAsCheerioFunction(html);
 
   const extractedArticle = $("main section").filter(function () {
     return (

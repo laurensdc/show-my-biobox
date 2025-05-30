@@ -12,7 +12,7 @@ function getWeekNumber(d) {
   return weekNo;
 }
 
-async function getHtmlAsCheerioFunction(html) {
+function getHtmlAsCheerioFunction(html) {
   const $ = cheerio.load(html);
   return $;
 }
@@ -47,7 +47,7 @@ function highlightThisWeek(ourBox, $) {
  * Mutate the box and wrap strong tags in a tags to link to the recipes
  * Fugly as f and works
  */
-async function addLinksToRecipes(ourBox, $) {
+function addLinksToRecipes(ourBox, $) {
   ourBox.find("li strong").each(function (index, el) {
     const item = $(el);
     const itemContent = item.text();
@@ -57,8 +57,8 @@ async function addLinksToRecipes(ourBox, $) {
   });
 }
 
-export async function fetchRelevantArticleAsHTML(html) {
-  const $ = await getHtmlAsCheerioFunction(html);
+export function fetchRelevantArticleAsHTML(html) {
+  const $ = getHtmlAsCheerioFunction(html);
 
   const extractedArticle = $("main section").filter(function () {
     return (

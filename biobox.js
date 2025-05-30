@@ -9,6 +9,17 @@ async function scrapeWebsite() {
   return html;
 }
 
+function getWeekNumber(d) {
+  // Copy date so don't modify original
+  d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  // Set to nearest Thursday: current date + 4 - current day number
+  // Make Sunday's day number 7
+  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+  var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+  return weekNo;
+}
+
 /**
  * For testing DOM selection, without network calls
  */
@@ -31,6 +42,26 @@ async function getHtmlAsCheerioFunction() {
 function declutterArticle(ourBox) {
   // Remove clutter from article
   ourBox.find("a").remove();
+  return ourBox;
+}
+
+function highlightThisWeek(ourBox, $) {
+  const weekNumber = (getWeekNumber(new Date()))
+
+  // it shows bioboxes from 3 different weeks
+  // <strong>2 juni tot 8 juni (week 23)</strong>
+  ourBox.find("p > strong").each(function (index, el) {
+    const item = $(el)
+
+    if (item.text().includes('week ' + weekNumber)) {
+      item.prepend("Deze week: ")
+    } else if (item.text().includes('week ' + (weekNumber - 1))) {
+      item.prepend("Vorige week: ")
+    } else if (item.text().includes('week ' + (weekNumber + 1))) {
+      item.prepend("Volgende week: ")
+    }
+  })
+
   return ourBox;
 }
 
@@ -60,7 +91,9 @@ export async function fetchRelevantArticleAsHTML() {
 
   const declutteredArticle = declutterArticle(extractedArticle);
 
-  addLinksToRecipes(declutteredArticle, $);
+  const thisWeekHighlightedArticle = highlightThisWeek(declutteredArticle, $)
 
-  return declutteredArticle.html();
+  addLinksToRecipes(thisWeekHighlightedArticle, $);
+
+  return thisWeekHighlightedArticle.html();
 }

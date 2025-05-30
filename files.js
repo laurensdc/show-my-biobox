@@ -4,10 +4,9 @@ import path from "path";
 export const bioboxDir = "./bioboxes";
 
 export function writeArticleToFile(article, fileName) {
-  if(!article) {
+  if (!article) {
     throw Error("Article is empty");
   }
-  console.log({ article });
   fs.writeFileSync(`${bioboxDir}/${fileName}`, article, "utf-8");
 }
 
@@ -59,7 +58,6 @@ export const getNavElement = () => {
   // Only use files of last 21 days, files are in the format of YYYY-MM-dd.html
   const filesOfLast7Days = filesInBioboxesDir.filter(file => {
     const date = new Date(file.replace(/\.html$/, ''));
-    console.dir(date, { depth: null, colors: true });
     const now = new Date();
     const diff = Math.abs(now - date);
     const diffDays = Math.ceil(diff / (1000 * 60 * 60 * 24));

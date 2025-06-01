@@ -31,7 +31,7 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/favicon.png', (req, res) => {
-  const __dirname = fileURLToPath(new URL('../', import.meta.url)); console.dir('getting it', { depth: null, colors: true });
+  const __dirname = fileURLToPath(new URL('../', import.meta.url));
   res.sendFile(path.join(__dirname, 'favicon.png'));
 });
 

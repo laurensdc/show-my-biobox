@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'url';
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
@@ -29,6 +30,11 @@ app.get('/', async (req, res) => {
   res.render('./index', { article, nav })
 });
 
+app.get('/favicon.png', (req, res) => {
+  const __dirname = fileURLToPath(new URL('../', import.meta.url)); console.dir('getting it', { depth: null, colors: true });
+  res.sendFile(path.join(__dirname, 'favicon.png'));
+});
+
 app.get('/:filename', async (req, res) => {
   const filename = req.params.filename;
   try {
@@ -42,8 +48,6 @@ app.get('/:filename', async (req, res) => {
     res.status(404).send('File not found: ' + err);
   }
 })
-
-app.use('favicon.png', express.static('./favicon.png'));
 
 app.listen(3000, () => {
   // open('http://localhost:3000')

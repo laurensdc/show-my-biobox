@@ -1,5 +1,24 @@
 import * as cheerio from "cheerio";
 
+export function fetchRelevantArticleAsHTML(html) {
+  const $ = getHtmlAsCheerioFunction(html);
+
+  const extractedArticle = $("main section").filter(function () {
+    return (
+      $(this).find("h1").text().trim().toLowerCase().includes("groente") &&
+      $(this).find("h1").text().trim().toLowerCase().includes("fruit")
+    );
+  });
+
+  const declutteredArticle = declutterArticle(extractedArticle);
+
+  const thisWeekHighlightedArticle = highlightThisWeek(declutteredArticle, $)
+
+  addLinksToRecipes(thisWeekHighlightedArticle, $);
+
+  return thisWeekHighlightedArticle.html();
+}
+
 function getWeekNumber(d) {
   // Copy date so don't modify original
   d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
@@ -56,21 +75,3 @@ function addLinksToRecipes(ourBox, $) {
   });
 }
 
-export function fetchRelevantArticleAsHTML(html) {
-  const $ = getHtmlAsCheerioFunction(html);
-
-  const extractedArticle = $("main section").filter(function () {
-    return (
-      $(this).find("h1").text().trim().toLowerCase().includes("groente") &&
-      $(this).find("h1").text().trim().toLowerCase().includes("fruit")
-    );
-  });
-
-  const declutteredArticle = declutterArticle(extractedArticle);
-
-  const thisWeekHighlightedArticle = highlightThisWeek(declutteredArticle, $)
-
-  addLinksToRecipes(thisWeekHighlightedArticle, $);
-
-  return thisWeekHighlightedArticle.html();
-}

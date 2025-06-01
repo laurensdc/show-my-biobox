@@ -3,6 +3,16 @@ import path from "path";
 
 export const bioboxDir = "./bioboxes";
 
+/**
+ * Write the file if no other file contains the same content
+ */
+export function writeFile(article) {
+  if (!contentExists(article)) {
+    writeArticleToFile(article, getFileName());
+    console.log(`Wrote file ${getFileName()}`);
+  }
+}
+
 function writeArticleToFile(article, fileName) {
   if (!article) {
     throw Error("Article is empty");
@@ -40,16 +50,6 @@ function contentExists(article) {
   }
 
   return false;
-}
-
-/**
- * Write the file if no other file contains the same content
- */
-export function writeFile(article) {
-  if (!contentExists(article)) {
-    writeArticleToFile(article, getFileName());
-    console.log(`Wrote file ${getFileName()}`);
-  }
 }
 
 

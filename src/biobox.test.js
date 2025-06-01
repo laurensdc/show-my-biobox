@@ -7,7 +7,7 @@ import { fetchRelevantArticleAsHTML } from "./biobox.js";
  * For testing DOM selection, without network calls
  */
 function readHtmlAsTempCodingThing() {
-  const data = fs.readFileSync("./dom-snip-for-testing.html", "utf-8");
+  const data = fs.readFileSync("./src/dom-snip-for-testing.html", "utf-8");
   return data;
 }
 

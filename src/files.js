@@ -3,14 +3,14 @@ import path from "path";
 
 export const bioboxDir = "./bioboxes";
 
-export function writeArticleToFile(article, fileName) {
+function writeArticleToFile(article, fileName) {
   if (!article) {
     throw Error("Article is empty");
   }
   fs.writeFileSync(`${bioboxDir}/${fileName}`, article, "utf-8");
 }
 
-export function getFileName() {
+function getFileName() {
   const date = new Date();
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");

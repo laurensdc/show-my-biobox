@@ -1,6 +1,5 @@
 import express from 'express';
 import fs from 'fs';
-import open from 'open';
 import path from 'path';
 
 

@@ -3,7 +3,8 @@ import fs from 'fs';
 import path from 'path';
 
 
-import { bioboxDir, getNavElement, writeFile } from './files.js';
+import { bioboxDir, writeFile } from './files.js';
+import { getNavElement } from "./nav.js";
 import { fetchRelevantArticleAsHTML } from './biobox.js';
 
 const app = express();

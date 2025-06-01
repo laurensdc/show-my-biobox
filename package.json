@@ -7,8 +7,8 @@
   "scripts": {
     "test": "node --test",
     "test:watch": "node --watch --test",
-    "start": "node index.js",
-    "watch": "npx nodemon index.js"
+    "start": "node src/index.js",
+    "watch": "npx nodemon src/index.js"
   },
   "author": "",
   "license": "ISC",

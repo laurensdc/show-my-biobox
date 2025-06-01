@@ -1,4 +1,3 @@
-import fs from "fs";
 import * as cheerio from "cheerio";
 
 function getWeekNumber(d) {

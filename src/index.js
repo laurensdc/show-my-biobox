@@ -50,5 +50,5 @@ app.get('/:filename', async (req, res) => {
 })
 
 app.listen(3000, () => {
-  // open('http://localhost:3000')
+  console.log('Started show-my-biobox on port 3000')
 });

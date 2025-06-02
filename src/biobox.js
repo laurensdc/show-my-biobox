@@ -10,13 +10,11 @@ export function fetchRelevantArticleAsHTML(html, today) {
     );
   });
 
-  const declutteredArticle = declutterArticle(extractedArticle);
+  declutterArticle(extractedArticle);
+  highlightThisWeek(extractedArticle, $, today)
+  addLinksToRecipes(extractedArticle, $);
 
-  const thisWeekHighlightedArticle = highlightThisWeek(declutteredArticle, $, today)
-
-  addLinksToRecipes(thisWeekHighlightedArticle, $);
-
-  return thisWeekHighlightedArticle.html();
+  return extractedArticle.html();
 }
 
 function getWeekNumber(d) {
@@ -38,7 +36,6 @@ function getHtmlAsCheerioFunction(html) {
 function declutterArticle(ourBox) {
   // Remove clutter from article
   ourBox.find("a").remove();
-  return ourBox;
 }
 
 function highlightThisWeek(ourBox, $, today) {
@@ -58,8 +55,6 @@ function highlightThisWeek(ourBox, $, today) {
       item.prepend("Volgende week: ")
     }
   })
-
-  return ourBox;
 }
 
 /**
@@ -69,9 +64,9 @@ function highlightThisWeek(ourBox, $, today) {
 function addLinksToRecipes(ourBox, $) {
   ourBox.find("li strong").each(function (index, el) {
     const item = $(el);
-    const itemContent = item.text().split(' ')[0];
+    const firstWord = item.text().split(' ')[0];
     item.wrap(
-      `<a href="https://www.dewassendemaan.be/nl/recepten?search=${itemContent}" target="_BLANK"></a>`,
+      `<a href="https://www.dewassendemaan.be/nl/recepten?search=${firstWord}" target="_BLANK"></a>`,
     );
   });
 }

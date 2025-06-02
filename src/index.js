@@ -10,7 +10,7 @@ import { fetchRelevantArticleAsHTML } from './biobox.js';
 
 const app = express();
 
-export async function scrapeWebsite() {
+async function scrapeWebsite() {
   const req = await fetch(
     "https://www.dewassendemaan.be/nl/inhoud/pakketinhoud",
   );
@@ -21,10 +21,18 @@ export async function scrapeWebsite() {
 app.set('view engine', 'ejs')
 
 app.get('/', async (req, res) => {
+  const today = new Date();
   const html = await scrapeWebsite();
-  const article = await fetchRelevantArticleAsHTML(html);
-  const filesInBioboxesDir = fs.readdirSync(bioboxDir);
-  const nav = getNavElement(filesInBioboxesDir, new Date());
+
+  let fileNames = []
+  try {
+    fileNames = fs.readdirSync(bioboxDir);
+  } catch (err) {
+    console.error(`Failed to read files in ${bioboxDir}: ${err.message}`)
+  }
+
+  const article = await fetchRelevantArticleAsHTML(html, today);
+  const nav = getNavElement(fileNames, today);
 
   writeFile(article);
 

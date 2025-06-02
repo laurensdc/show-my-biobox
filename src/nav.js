@@ -6,11 +6,10 @@ import { bioboxDir } from "./files.js";
  *  
  * @returns links with bioboxes of last 3 weeks
  */
-export const getNavElement = () => {
-  const filesInBioboxesDir = fs.readdirSync(bioboxDir);
+export const getNavElement = (fileNames) => {
 
   // Only use files of last 21 days, files are in the format of YYYY-MM-dd.html
-  const filesOfLast7Days = filesInBioboxesDir.filter(file => {
+  const filesOfLast7Days = fileNames.filter(file => {
     const date = new Date(file.replace(/\.html$/, ''));
     const now = new Date();
     const diff = Math.abs(now - date);

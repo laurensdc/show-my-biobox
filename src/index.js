@@ -23,7 +23,8 @@ app.set('view engine', 'ejs')
 app.get('/', async (req, res) => {
   const html = await scrapeWebsite();
   const article = await fetchRelevantArticleAsHTML(html);
-  const nav = getNavElement();
+  const filesInBioboxesDir = fs.readdirSync(bioboxDir);
+  const nav = getNavElement(filesInBioboxesDir);
 
   writeFile(article);
 
@@ -40,7 +41,8 @@ app.get('/:filename', async (req, res) => {
   try {
     const filePath = path.join(bioboxDir, filename);
     const article = fs.readFileSync(filePath, 'utf-8');
-    const nav = getNavElement();
+    const filesInBioboxesDir = fs.readdirSync(bioboxDir);
+    const nav = getNavElement(filesInBioboxesDir);
 
     res.render('./index', { article, nav })
   }

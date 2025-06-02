@@ -35,8 +35,7 @@ describe("fetchRelevantArticleAsHTML", () => {
           <li><a href="https://www.dewassendemaan.be/nl/recepten?search=mango" target="_BLANK"><strong>mango 'Osteen'</strong></a> (ES) (1 stuk)&nbsp;</li>
         </ul>
         <p class="block-img"></p>
-        <p class="text-base text-primary-black"><strong>Week van 14 okt tot 21 okt (we
-            ek 42)</strong></p>
+        <p class="text-base text-primary-black"><strong>Week van 14 okt tot 21 okt (week 42)</strong></p>
         <ul>
           <li><a href="https://www.dewassendemaan.be/nl/recepten?search=kervel" target="_BLANK"><strong>kervel </strong></a>(van eigen oogst) (1 bussel)</li>
           <li><a href="https://www.dewassendemaan.be/nl/recepten?search=groene" target="_BLANK"><strong>groene pompoen of pompoen 'Blue Ballet' </strong></a>(van eigen oogst) (1 stuk)</li>
@@ -93,5 +92,11 @@ describe("fetchRelevantArticleAsHTML", () => {
     ok(got.includes(`<a href="https://www.dewassendemaan.be/nl/recepten?search=avocado" target="_BLANK">`))
   })
 
-  it.todo("highlights the current week")
+  it("highlights the current, previous and next week", () => {
+    const html = readHtmlAsTempCodingThing();
+    const got = fetchRelevantArticleAsHTML(html, new Date(2024, 9, 16));
+    ok(got.includes(`Vorige week: Week van 7 okt tot 14 okt (week 41)`), got)
+    ok(got.includes(`Deze week: Week van 14 okt tot 21 okt (week 42)`), got)
+    ok(got.includes(`Volgende week: Week van 21 okt tot 28 okt (week 43)`), got)
+  })
 })

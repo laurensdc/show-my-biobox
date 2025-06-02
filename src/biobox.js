@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 
-export function fetchRelevantArticleAsHTML(html) {
+export function fetchRelevantArticleAsHTML(html, today) {
   const $ = getHtmlAsCheerioFunction(html);
 
   const extractedArticle = $("main section").filter(function () {
@@ -12,7 +12,7 @@ export function fetchRelevantArticleAsHTML(html) {
 
   const declutteredArticle = declutterArticle(extractedArticle);
 
-  const thisWeekHighlightedArticle = highlightThisWeek(declutteredArticle, $)
+  const thisWeekHighlightedArticle = highlightThisWeek(declutteredArticle, $, today)
 
   addLinksToRecipes(thisWeekHighlightedArticle, $);
 
@@ -41,8 +41,9 @@ function declutterArticle(ourBox) {
   return ourBox;
 }
 
-function highlightThisWeek(ourBox, $) {
-  const weekNumber = (getWeekNumber(new Date()))
+function highlightThisWeek(ourBox, $, today) {
+  const date = today ? today : new Date()
+  const weekNumber = (getWeekNumber(new Date(date)))
 
   // it shows bioboxes from 3 different weeks
   // <strong>2 juni tot 8 juni (week 23)</strong>

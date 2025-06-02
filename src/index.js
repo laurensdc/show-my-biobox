@@ -3,8 +3,7 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 
-
-import { bioboxDir, writeFile } from './files.js';
+import { bioboxDir, readFileNames, writeFile } from './files.js';
 import { getNavElement } from "./nav.js";
 import { fetchRelevantArticleAsHTML } from './biobox.js';
 
@@ -23,20 +22,12 @@ app.set('view engine', 'ejs')
 app.get('/', async (req, res) => {
   const today = new Date();
   const html = await scrapeWebsite();
-
-  let fileNames = []
-  try {
-    fileNames = fs.readdirSync(bioboxDir);
-  } catch (err) {
-    console.error(`Failed to read files in ${bioboxDir}: ${err.message}`)
-  }
-
+  const fileNames = readFileNames();
   const article = await fetchRelevantArticleAsHTML(html, today);
   const nav = getNavElement(fileNames, today);
-
   writeFile(article);
 
-  res.render('./index', { article, nav })
+  res.render('./index', { article, nav });
 });
 
 app.get('/favicon.png', (req, res) => {
@@ -46,13 +37,15 @@ app.get('/favicon.png', (req, res) => {
 
 app.get('/:filename', async (req, res) => {
   const filename = req.params.filename;
+
   try {
     const filePath = path.join(bioboxDir, filename);
     const article = fs.readFileSync(filePath, 'utf-8');
     const filesInBioboxesDir = fs.readdirSync(bioboxDir);
-    const nav = getNavElement(filesInBioboxesDir, new Date());
+    const today = new Date();
+    const nav = getNavElement(filesInBioboxesDir, today);
 
-    res.render('./index', { article, nav })
+    res.render('./index', { article, nav });
   }
   catch (err) {
     res.status(404).send('File not found: ' + err);

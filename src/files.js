@@ -13,6 +13,19 @@ export function writeFile(article) {
   }
 }
 
+/**
+ * Return file names from bioboxDir
+ */
+export function readFileNames() {
+  let fileNames = [];
+  try {
+    fileNames = fs.readdirSync(bioboxDir);
+  } catch (err) {
+    console.error(`Failed to read files in ${bioboxDir}: ${err.message}`);
+  }
+  return fileNames;
+}
+
 function writeArticleToFile(article, fileName) {
   if (!article) {
     throw Error("Article is empty");

@@ -23,8 +23,10 @@ app.get('/', async (req, res) => {
   const today = new Date();
   const html = await scrapeWebsite();
   const fileNames = readFileNames();
+
   const article = await fetchRelevantArticleAsHTML(html, today);
   const nav = getNavElement(fileNames, today);
+
   writeFile(article);
 
   res.render('./index', { article, nav });
@@ -39,11 +41,12 @@ app.get('/:filename', async (req, res) => {
   const filename = req.params.filename;
 
   try {
-    const filePath = path.join(bioboxDir, filename);
-    const article = fs.readFileSync(filePath, 'utf-8');
-    const filesInBioboxesDir = fs.readdirSync(bioboxDir);
     const today = new Date();
-    const nav = getNavElement(filesInBioboxesDir, today);
+    const fileNames = readFileNames()
+    const filePath = path.join(bioboxDir, filename);
+
+    const article = fs.readFileSync(filePath, 'utf-8');
+    const nav = getNavElement(fileNames, today);
 
     res.render('./index', { article, nav });
   }

@@ -1,6 +1,3 @@
-import fs from "fs";
-import { bioboxDir } from "./files.js";
-
 /**
  * Take in array of filenames and return a <nav> element with links to those files
  *  
